@@ -1,0 +1,54 @@
+# Secrets and Environment Variables
+.streamlit/secrets.toml
+.env
+*.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Temporary Files
+*.tmp
+*.temp
+temp/
+tmp/
+.cache/
+*.log
+
+# Audio Files (large temp files)
+*.mp3
+*.m4a
+*.wav
+!example.mp3
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Streamlit
+.streamlit/config.toml
