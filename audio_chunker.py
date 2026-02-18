@@ -27,16 +27,16 @@ logger = logging.getLogger(__name__)
 # ── Auto-discover ffmpeg for pydub ──────────────────────
 # static_ffmpeg bundles both ffmpeg AND ffprobe as properly named
 # executables and adds them to PATH so pydub can find them.
-if not shutil.which("ffmpeg"):
-    try:
-        import static_ffmpeg
-        static_ffmpeg.add_paths()
-        logger.info("Added static-ffmpeg binaries to PATH.")
-    except ImportError:
-        logger.warning(
-            "ffmpeg not found on PATH and static-ffmpeg not installed. "
-            "pydub will fail to load audio files."
-        )
+# if not shutil.which("ffmpeg"):
+#     try:
+#         import static_ffmpeg
+#         static_ffmpeg.add_paths()
+#         logger.info("Added static-ffmpeg binaries to PATH.")
+#     except ImportError:
+#         logger.warning(
+#             "ffmpeg not found on PATH and static-ffmpeg not installed. "
+#             "pydub will fail to load audio files."
+#         )
 
 # ──────────────────────────────────────────────────────────
 #  0. Noise Reduction
