@@ -42,50 +42,50 @@ logger = logging.getLogger(__name__)
 #  0. Noise Reduction
 # ──────────────────────────────────────────────────────────
 
-def remove_background_noise(filepath: str) -> str:
-    """
-    Apply non-stationary spectral-gating noise reduction to an audio file.
-
-    Uses dynamic tracking (adapts to changing background noise every 2s)
-    with moderate reduction (0.6) to preserve voice clarity.
-    Normalizes volume back to 0 dBFS after cleaning.
-    Returns the path to the cleaned audio file (mp3 in temp dir).
-    """
-    logger.info("Cleaning audio: %s", filepath)
-
-    # Load with pydub
-    audio = AudioSegment.from_file(filepath)
-
-    # Convert to numpy array
-    samples = np.array(audio.get_array_of_samples())
-
-    # Handle stereo vs mono
-    if audio.channels > 1:
-        samples = samples.reshape((-1, audio.channels)).T
-
-    # Apply non-stationary noise reduction
-    reduced_noise = nr.reduce_noise(
-        y=samples,
-        sr=audio.frame_rate,
-        stationary=False,       # Dynamically tracks changing background noise
-        time_constant_s=2.0,    # Adapts to new background sounds every 2 seconds
-        prop_decrease=0.6,      # 60% reduction to prevent voice muffling
-    )
-
-    # Convert back to pydub format
-    if audio.channels > 1:
-        reduced_noise = reduced_noise.T.flatten()
-
-    clean_audio = audio._spawn(reduced_noise.tobytes())
-
-    # Volume restoration — boost back to maximum safe level (0 dBFS)
-    clean_audio = clean_audio.apply_gain(-clean_audio.max_dBFS)
-
-    # Export cleaned audio to temp file
-    cleaned_path = os.path.join(tempfile.gettempdir(), "cleaned_audio.mp3")
-    clean_audio.export(cleaned_path, format="mp3")
-    logger.info("Noise reduction complete → %s", cleaned_path)
-    return cleaned_path
+# def remove_background_noise(filepath: str) -> str:
+#     """
+#     Apply non-stationary spectral-gating noise reduction to an audio file.
+# 
+#     Uses dynamic tracking (adapts to changing background noise every 2s)
+#     with moderate reduction (0.6) to preserve voice clarity.
+#     Normalizes volume back to 0 dBFS after cleaning.
+#     Returns the path to the cleaned audio file (mp3 in temp dir).
+#     """
+#     logger.info("Cleaning audio: %s", filepath)
+# 
+#     # Load with pydub
+#     audio = AudioSegment.from_file(filepath)
+# 
+#     # Convert to numpy array
+#     samples = np.array(audio.get_array_of_samples())
+# 
+#     # Handle stereo vs mono
+#     if audio.channels > 1:
+#         samples = samples.reshape((-1, audio.channels)).T
+# 
+#     # Apply non-stationary noise reduction
+#     reduced_noise = nr.reduce_noise(
+#         y=samples,
+#         sr=audio.frame_rate,
+#         stationary=False,       # Dynamically tracks changing background noise
+#         time_constant_s=2.0,    # Adapts to new background sounds every 2 seconds
+#         prop_decrease=0.6,      # 60% reduction to prevent voice muffling
+#     )
+# 
+#     # Convert back to pydub format
+#     if audio.channels > 1:
+#         reduced_noise = reduced_noise.T.flatten()
+# 
+#     clean_audio = audio._spawn(reduced_noise.tobytes())
+# 
+#     # Volume restoration — boost back to maximum safe level (0 dBFS)
+#     clean_audio = clean_audio.apply_gain(-clean_audio.max_dBFS)
+# 
+#     # Export cleaned audio to temp file
+#     cleaned_path = os.path.join(tempfile.gettempdir(), "cleaned_audio.mp3")
+#     clean_audio.export(cleaned_path, format="mp3")
+#     logger.info("Noise reduction complete → %s", cleaned_path)
+#     return cleaned_path
 
 
 # ──────────────────────────────────────────────────────────
